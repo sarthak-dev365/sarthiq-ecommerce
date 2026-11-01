@@ -1,0 +1,148 @@
+
+.cart-page {
+    padding: 45px 5%;
+    min-height: 75vh;
+}
+
+.cart-page > h1 {
+    font-size: 30px;
+    margin-bottom: 30px;
+    color: #171c32;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 65px 20px;
+    background: white;
+    border-radius: 15px;
+}
+
+.empty-cart span {
+    font-size: 65px;
+}
+
+.empty-cart h2 {
+    margin: 15px 0 10px;
+}
+
+.empty-cart p {
+    color: #64748b;
+    margin-bottom: 20px;
+}
+
+.empty-cart a,
+.cart-summary > a {
+    display: inline-block;
+    padding: 13px 20px;
+    background: #6254d9;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.cart-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
+    align-items: start;
+}
+
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #edf0f5;
+}
+
+.cart-item-icon {
+    width: 85px;
+    height: 85px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f0ff;
+    border-radius: 10px;
+    font-size: 40px;
+}
+
+.cart-item-info {
+    flex: 1;
+}
+
+.cart-item-info h3 {
+    margin-bottom: 8px;
+    color: #172033;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin: 12px 0;
+}
+
+.quantity-controls button {
+    width: 28px;
+    height: 28px;
+    border: 1px solid #dce1eb;
+    border-radius: 5px;
+    background: white;
+    color: #172033;
+}
+
+.remove-button {
+    border: none;
+    background: none;
+    color: #dc3545;
+    font-size: 13px;
+}
+
+.cart-summary {
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #edf0f5;
+}
+
+.cart-summary h2 {
+    margin-bottom: 25px;
+    font-size: 21px;
+}
+
+.summary-row,
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.summary-total {
+    padding-top: 18px;
+    border-top: 1px solid #e2e8f0;
+    font-size: 19px;
+}
+
+.cart-summary > a {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .cart-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-item {
+        flex-wrap: wrap;
+    }
+}

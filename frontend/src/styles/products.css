@@ -1,0 +1,125 @@
+
+.products-page {
+    padding: 45px 5%;
+    min-height: 75vh;
+}
+
+.products-heading {
+    margin-bottom: 28px;
+}
+
+.products-heading h1 {
+    font-size: 32px;
+    color: #171c32;
+    margin-bottom: 10px;
+}
+
+.products-heading p {
+    color: #64748b;
+}
+
+.products-controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.products-controls input,
+.products-controls select {
+    padding: 12px 15px;
+    border: 1px solid #dce1eb;
+    border-radius: 8px;
+    outline: none;
+    background: white;
+    color: #172033;
+}
+
+.products-controls input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.products-controls select:focus,
+.products-controls input:focus {
+    border-color: #6254d9;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.listing-card {
+    padding: 20px;
+    background: white;
+    border: 1px solid #edf0f5;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(23, 28, 50, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.listing-card:hover {
+    transform: translateY(-5px);
+}
+
+.listing-icon {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f0ff;
+    border-radius: 10px;
+    font-size: 65px;
+    margin-bottom: 17px;
+}
+
+.listing-card p {
+    color: #6254d9;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.listing-card h3 {
+    color: #172033;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.listing-card strong {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.listing-card button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 7px;
+    background: #6254d9;
+    color: white;
+    font-weight: bold;
+}
+
+.listing-card button:hover {
+    background: #493bc0;
+}
+
+.no-products {
+    color: #64748b;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+}
