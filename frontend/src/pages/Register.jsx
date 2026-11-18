@@ -1,9 +1,11 @@
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../styles/register.css";
 
 function Register() {
+
+    const navigate = useNavigate();
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -11,8 +13,9 @@ function Register() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [terms, setTerms] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    function handleRegister(event) {
+    async function handleRegister(event) {
         event.preventDefault();
 
         if (password !== confirmPassword) {
@@ -25,11 +28,44 @@ function Register() {
             return;
         }
 
-        console.log("Registration Details:", {
-            name,
-            email,
-            phone
-        });
+        try {
+            setLoading(true);
+
+            const response = await fetch(
+                "http://localhost:5000/api/users/register",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password,
+                        phone
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Registration failed"
+                );
+            }
+
+            alert("Registration successful!");
+
+            navigate("/login");
+
+        } catch (error) {
+            console.error("Registration Error:", error);
+            alert(error.message);
+
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -138,8 +174,9 @@ function Register() {
                     <button
                         type="submit"
                         className="register-button"
+                        disabled={loading}
                     >
-                        Create Account
+                        {loading ? "Creating Account..." : "Create Account"}
                     </button>
 
                 </form>

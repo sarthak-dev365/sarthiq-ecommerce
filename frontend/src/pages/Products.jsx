@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../styles/products.css";
 
@@ -7,57 +8,46 @@ function Products() {
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState("default");
 
-  const products = [
-    {
-      id: 1,
-      name: "Wireless Headphones",
-      price: 799,
-      category: "Electronics",
-      icon: "🎧",
-    },
-    {
-      id: 2,
-      name: "Notebook Set",
-      price: 199,
-      category: "Stationery",
-      icon: "📚",
-    },
-    {
-      id: 3,
-      name: "Smart Watch",
-      price: 1299,
-      category: "Accessories",
-      icon: "⌚",
-    },
-    {
-      id: 4,
-      name: "Travel Backpack",
-      price: 599,
-      category: "Lifestyle",
-      icon: "🎒",
-    },
-    {
-      id: 5,
-      name: "Wireless Mouse",
-      price: 499,
-      category: "Electronics",
-      icon: "🖱️",
-    },
-    {
-      id: 6,
-      name: "Pen Combo",
-      price: 149,
-      category: "Stationery",
-      icon: "🖊️",
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/products"
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+
+        const data = await response.json();
+
+        const formattedProducts = data.map((product) => ({
+          ...product,
+          id: product._id,
+        }));
+
+        setProducts(formattedProducts);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   let filteredProducts = products.filter((product) => {
     const matchesSearch = product.name
       .toLowerCase()
       .includes(search.toLowerCase());
 
-    const matchesCategory = category === "All" || product.category === category;
+    const matchesCategory =
+      category === "All" || product.category === category;
 
     return matchesSearch && matchesCategory;
   });
@@ -104,10 +94,28 @@ function Products() {
       </div>
 
       <div className="products-grid">
-        {filteredProducts.length > 0 ? (
+        {loading ? (
+          <p>Loading products...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <div className="listing-card" key={product.id}>
-              <div className="listing-icon">{product.icon}</div>
+              <div className="listing-icon">
+                {product.image?.startsWith("http") ? (
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",
+                    }}
+                  />
+                ) : (
+                  "📦"
+                )}
+              </div>
 
               <p>{product.category}</p>
 

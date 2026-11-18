@@ -1,18 +1,63 @@
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../styles/login.css";
 
 function Login() {
 
+    const navigate = useNavigate();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    function handleLogin(event) {
+    async function handleLogin(event) {
         event.preventDefault();
 
-        console.log("Email:", email);
-        console.log("Password:", password);
+        try {
+            setLoading(true);
+
+            const response = await fetch(
+                "http://localhost:5000/api/users/login",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password
+                    })
+                }
+            );
+
+            const data = await response.json();
+            console.log("data", data);
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Login failed"
+                );
+            }
+
+            // Check JWT Token
+            if (!data.token) {
+                throw new Error("Token not received from server");
+            }
+
+            // Save Token in Local Storage
+            localStorage.setItem("token", data.token);
+
+            alert("Login successful!");
+
+            navigate("/");
+
+        } catch (error) {
+            console.error("Login Error:", error);
+            alert(error.message);
+
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -59,8 +104,12 @@ function Login() {
                         />
                     </div>
 
-                    <button type="submit" className="login-button">
-                        Login to Account
+                    <button
+                        type="submit"
+                        className="login-button"
+                        disabled={loading}
+                    >
+                        {loading ? "Logging in..." : "Login to Account"}
                     </button>
 
                 </form>

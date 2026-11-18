@@ -1,38 +1,39 @@
 
+import { useState, useEffect } from "react";
 import "../styles/featured-products.css";
 
 function FeaturedProducts() {
 
-    const products = [
-        {
-            id: 1,
-            name: "Wireless Headphones",
-            price: 799,
-            icon: "🎧",
-            category: "Electronics"
-        },
-        {
-            id: 2,
-            name: "Notebook Set",
-            price: 199,
-            icon: "📚",
-            category: "Stationery"
-        },
-        {
-            id: 3,
-            name: "Smart Watch",
-            price: 1299,
-            icon: "⌚",
-            category: "Accessories"
-        },
-        {
-            id: 4,
-            name: "Travel Backpack",
-            price: 599,
-            icon: "🎒",
-            category: "Lifestyle"
-        }
-    ];
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+
+        const fetchFeaturedProducts = async () => {
+            try {
+                const response = await fetch(
+                    "http://localhost:5000/api/products/featured"
+                );
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch featured products");
+                }
+
+                const data = await response.json();
+
+                setProducts(data);
+
+            } catch (error) {
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchFeaturedProducts();
+
+    }, []);
 
     return (
         <section className="featured-section">
@@ -44,29 +45,53 @@ function FeaturedProducts() {
 
             <div className="product-grid">
 
-                {products.map((product) => (
-                    <div className="product-card" key={product.id}>
+                {loading ? (
+                    <p>Loading featured products...</p>
+                ) : error ? (
+                    <p>{error}</p>
+                ) : products.length > 0 ? (
 
-                        <div className="product-icon">
-                            {product.icon}
+                    products.map((product) => (
+                        <div className="product-card" key={product._id}>
+
+                            <div className="product-icon">
+                                {product.image?.startsWith("http") ? (
+                                    <img
+                                        src={product.image}
+                                        alt={product.name}
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "contain"
+                                        }}
+                                    />
+                                ) : (
+                                    "📦"
+                                )}
+                            </div>
+
+                            <p className="product-category">
+                                {product.category}
+                            </p>
+
+                            <h3>{product.name}</h3>
+
+                            <strong className="product-price">
+                                ₹{product.price}
+                            </strong>
+
+                            <button type="button">
+                                View Product
+                            </button>
+
                         </div>
+                    ))
 
-                        <p className="product-category">
-                            {product.category}
-                        </p>
-
-                        <h3>{product.name}</h3>
-
-                        <strong className="product-price">
-                            ₹{product.price}
-                        </strong>
-
-                        <button type="button">
-                            View Product
-                        </button>
-
-                    </div>
-                ))}
+                ) : (
+                    <p className="no-products">
+                        No featured products available.
+                    </p>
+                )}
 
             </div>
 
